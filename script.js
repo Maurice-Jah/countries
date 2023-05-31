@@ -59,16 +59,10 @@ const renderCountry = function (data, className = '') {
 // getCountryAndNeigbour('Nigeria');
 
 // USING PROMISE
-const request = fetch('https://restcountries.com/v2/name/Nigeria');
-
 const getCountry = function (country) {
   fetch(`https://restcountries.com/v2/name/${country}`)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      renderCountry(data[0]);
-    });
+    .then(response => response.json())
+    .then(data => renderCountry(data[0]));
 };
 
 getCountry('Portugal');
