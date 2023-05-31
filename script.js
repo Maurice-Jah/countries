@@ -27,34 +27,48 @@ const renderCountry = function (data, className = '') {
   countriesContainer.style.opacity = 1;
 };
 
-const getCountryAndNeigbour = function (country) {
-  // Ajax first call
-  const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.com/v2/name/${country}`);
-  request.send();
+// const getCountryAndNeigbour = function (country) {
+//   // Ajax first call
+//   const request = new XMLHttpRequest();
+//   request.open('GET', `https://restcountries.com/v2/name/${country}`);
+//   request.send();
 
-  request.addEventListener('load', function () {
-    const [data] = JSON.parse(this.responseText);
+//   request.addEventListener('load', function () {
+//     const [data] = JSON.parse(this.responseText);
 
-    // Render country 1
-    renderCountry(data);
+//     // Render country 1
+//     renderCountry(data);
 
-    const neighbour = data.borders[1];
+//     const neighbour = data.borders[1];
 
-    if (!neighbour) return;
+//     if (!neighbour) return;
 
-    // Second Ajax call
-    const request2 = new XMLHttpRequest();
-    request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
-    request2.send();
+//     // Second Ajax call
+//     const request2 = new XMLHttpRequest();
+//     request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
+//     request2.send();
 
-    request2.addEventListener('load', function () {
-      const data2 = JSON.parse(request2.responseText);
+//     request2.addEventListener('load', function () {
+//       const data2 = JSON.parse(request2.responseText);
 
-      // Render country 2
-      renderCountry(data2, 'neighbour');
+//       // Render country 2
+//       renderCountry(data2, 'neighbour');
+//     });
+//   });
+// };
+// getCountryAndNeigbour('Nigeria');
+
+// USING PROMISE
+const request = fetch('https://restcountries.com/v2/name/Nigeria');
+
+const getCountry = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      renderCountry(data[0]);
     });
-  });
 };
 
-getCountryAndNeigbour('Nigeria');
+getCountry('Portugal');
