@@ -308,19 +308,30 @@ const getPosition = function () {
 
 // Promisifying the geolocation application
 const whereAmIn = async function () {
-  const pos = await getPosition();
-  const { latitude: lat, longitude: lng } = pos.coords;
+  try {
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
 
-  const resGeo = await fetch(
-    `https://geocode.xyz/${lat},${lng}?geoit=json&auth=${'190887375322677222895x50074'}`
-  );
+    const resGeo = await fetch(
+      `https://geocode.xyz/${lat},${lng}?geoit=json&auth=${'190887375322677222895x50074'}`
+    );
 
-  const dataGeo = await resGeo.json();
-  const res = await fetch(
-    `https://restcountries.com/v2/name/${dataGeo.country}`
-  );
-  const data = await res.json();
-  renderCountry(data[0]);
+    if (!resGeo.ok) throw new Error('Problem locating the location');
+
+    const dataGeo = await resGeo.json();
+
+    const res = await fetch(
+      `https://restcountries.com/v2/name/${dataGeo.country}`
+    );
+
+    if (!res.ok) throw new Error('Problem getting country');
+    const data = await res.json();
+    renderCountry(data[0]);
+  } catch (err) {
+    renderError(`Something went wrong ${err.message}`);
+  }
 };
 
+whereAmIn();
+whereAmIn();
 whereAmIn();
