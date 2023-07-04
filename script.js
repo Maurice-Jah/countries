@@ -327,11 +327,32 @@ const whereAmIn = async function () {
     if (!res.ok) throw new Error('Problem getting country');
     const data = await res.json();
     renderCountry(data[0]);
+
+    return `You are in  ${dataGeo.city}, ${dataGeo.country}`;
   } catch (err) {
     renderError(`Something went wrong ${err.message}`);
+
+    // Reject promise returned from async function
+    throw err;
   }
 };
 
-whereAmIn();
-whereAmIn();
-whereAmIn();
+console.log('1: Will get location');
+
+// whereAmIn();
+
+// whereAmIn()
+//   .then(city => console.log(city))
+//   .catch(err => console.log(`Vol2 error ${err.message}`))
+//   .finally(() => console.log('3: Finished getting location'));
+
+// Using IIFE to get to get the returned value in async
+(async function () {
+  try {
+    const answer = await whereAmIn();
+    console.log(answer);
+  } catch (err) {
+    console.log(`Vol2 error ${err.message}`);
+  }
+  console.log('3: Finished getting location');
+})();
