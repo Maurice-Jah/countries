@@ -396,15 +396,24 @@ const whereAmIn = async function () {
 //   console.log(res[0]);
 // })();
 
-const timeout = function (sec) {
-  return new Promise(function (_, reject) {
-    setTimeout(() => reject(new Error('Request took too long')), sec * 1000);
-  });
-};
+// const timeout = function (sec) {
+//   return new Promise(function (_, reject) {
+//     setTimeout(() => reject(new Error('Request took too long')), sec * 1000);
+//   });
+// };
 
-Promise.race([
-  getJSON(`https://restcountries.com/v2/name/Niger`),
-  timeout(0.01),
+// Promise.race([
+//   getJSON(`https://restcountries.com/v2/name/Niger`),
+//   timeout(0.01),
+// ])
+//   .then(res => console.log(res[0]))
+//   .catch(err => console.error(err));
+
+// ====== PROMISE.ALLSETTLED ==== Returns all whether sucess or rejected
+Promise.allSettled([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Success'),
 ])
-  .then(res => console.log(res[0]))
-  .catch(err => console.error(err));
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
