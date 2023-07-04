@@ -337,22 +337,47 @@ const whereAmIn = async function () {
   }
 };
 
-console.log('1: Will get location');
+// console.log('1: Will get location');
 
-// whereAmIn();
+// // whereAmIn();
 
-// whereAmIn()
-//   .then(city => console.log(city))
-//   .catch(err => console.log(`Vol2 error ${err.message}`))
-//   .finally(() => console.log('3: Finished getting location'));
+// // whereAmIn()
+// //   .then(city => console.log(city))
+// //   .catch(err => console.log(`Vol2 error ${err.message}`))
+// //   .finally(() => console.log('3: Finished getting location'));
 
-// Using IIFE to get to get the returned value in async
-(async function () {
+// // Using IIFE to get to get the returned value in async
+// (async function () {
+//   try {
+//     const answer = await whereAmIn();
+//     console.log(answer);
+//   } catch (err) {
+//     console.log(`Vol2 error ${err.message}`);
+//   }
+//   console.log('3: Finished getting location');
+// })();
+
+// .......  RUNNING PROMISE IN PARALLEL
+
+const get3Countries = async function (cl1, cl2, cl3) {
   try {
-    const answer = await whereAmIn();
-    console.log(answer);
+    // const [data] = await getJSON(`https://restcountries.com/v2/name/${cl1}`);
+    // const [data1] = await getJSON(`https://restcountries.com/v2/name/${cl2}`);
+    // const [data2] = await getJSON(`https://restcountries.com/v2/name/${cl3}`);
+    // console.log([data.capital, data1.capital, data2.capital]);
+
+    //Promise.all ====== Any error leads to rejection of the whole promise
+    const data = await Promise.all([
+      getJSON(`https://restcountries.com/v2/name/${cl1}`),
+      getJSON(`https://restcountries.com/v2/name/${cl2}`),
+      getJSON(`https://restcountries.com/v2/name/${cl3}`),
+    ]);
+
+    const capital = data.map(d => d[0].capital);
+    console.log(capital);
   } catch (err) {
-    console.log(`Vol2 error ${err.message}`);
+    console.log(err);
   }
-  console.log('3: Finished getting location');
-})();
+};
+
+get3Countries('Nigeria', 'usa', 'Tanzania');
