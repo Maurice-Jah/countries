@@ -359,25 +359,52 @@ const whereAmIn = async function () {
 
 // .......  RUNNING PROMISE IN PARALLEL
 
-const get3Countries = async function (cl1, cl2, cl3) {
-  try {
-    // const [data] = await getJSON(`https://restcountries.com/v2/name/${cl1}`);
-    // const [data1] = await getJSON(`https://restcountries.com/v2/name/${cl2}`);
-    // const [data2] = await getJSON(`https://restcountries.com/v2/name/${cl3}`);
-    // console.log([data.capital, data1.capital, data2.capital]);
+// const get3Countries = async function (cl1, cl2, cl3) {
+//   try {
+//     // const [data] = await getJSON(`https://restcountries.com/v2/name/${cl1}`);
+//     // const [data1] = await getJSON(`https://restcountries.com/v2/name/${cl2}`);
+//     // const [data2] = await getJSON(`https://restcountries.com/v2/name/${cl3}`);
+//     // console.log([data.capital, data1.capital, data2.capital]);
 
-    //Promise.all ====== Any error leads to rejection of the whole promise
-    const data = await Promise.all([
-      getJSON(`https://restcountries.com/v2/name/${cl1}`),
-      getJSON(`https://restcountries.com/v2/name/${cl2}`),
-      getJSON(`https://restcountries.com/v2/name/${cl3}`),
-    ]);
+//     //Promise.all ====== Any error leads to rejection of the whole promise
+//     const data = await Promise.all([
+//       getJSON(`https://restcountries.com/v2/name/${cl1}`),
+//       getJSON(`https://restcountries.com/v2/name/${cl2}`),
+//       getJSON(`https://restcountries.com/v2/name/${cl3}`),
+//     ]);
 
-    const capital = data.map(d => d[0].capital);
-    console.log(capital);
-  } catch (err) {
-    console.log(err);
-  }
+//     const capital = data.map(d => d[0].capital);
+//     console.log(capital);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+
+// get3Countries('Nigeria', 'usa', 'Tanzania');
+
+// Other combinators
+
+// ====== Promise.race=== the first settled(fuilled or rejected) promise wins the race
+
+// (async function () {
+//   const res = await Promise.race([
+//     getJSON(`https://restcountries.com/v2/name/Niger`),
+//     getJSON(`https://restcountries.com/v2/name/egypt`),
+//     getJSON(`https://restcountries.com/v2/name/mexico`),
+//   ]);
+
+//   console.log(res[0]);
+// })();
+
+const timeout = function (sec) {
+  return new Promise(function (_, reject) {
+    setTimeout(() => reject(new Error('Request took too long')), sec * 1000);
+  });
 };
 
-get3Countries('Nigeria', 'usa', 'Tanzania');
+Promise.race([
+  getJSON(`https://restcountries.com/v2/name/Niger`),
+  timeout(0.01),
+])
+  .then(res => console.log(res[0]))
+  .catch(err => console.error(err));
