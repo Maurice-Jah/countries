@@ -417,3 +417,12 @@ Promise.allSettled([
 ])
   .then(res => console.log(res))
   .catch(err => console.log(err));
+
+// ====== PROMISE.any ==== Returns only sucess
+Promise.any([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
