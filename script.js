@@ -410,19 +410,44 @@ const whereAmIn = async function () {
 //   .catch(err => console.error(err));
 
 // ====== PROMISE.ALLSETTLED ==== Returns all whether sucess or rejected
-Promise.allSettled([
-  Promise.resolve('Success'),
-  Promise.reject('Error'),
-  Promise.resolve('Success'),
-])
-  .then(res => console.log(res))
-  .catch(err => console.log(err));
+// Promise.allSettled([
+//   Promise.resolve('Success'),
+//   Promise.reject('Error'),
+//   Promise.resolve('Success'),
+// ])
+//   .then(res => console.log(res))
+//   .catch(err => console.log(err));
 
-// ====== PROMISE.any ==== Returns only sucess
-Promise.any([
-  Promise.resolve('Success'),
-  Promise.reject('Error'),
-  Promise.resolve('Success'),
-])
-  .then(res => console.log(res))
-  .catch(err => console.log(err));
+// // ====== PROMISE.any ==== Returns only sucess
+// Promise.any([
+//   Promise.resolve('Success'),
+//   Promise.reject('Error'),
+//   Promise.resolve('Success'),
+// ])
+//   .then(res => console.log(res))
+//   .catch(err => console.log(err));
+
+// CODING CHALLENGE PART 1
+const wait = function (secs) {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve();
+    }, secs * 1000);
+  });
+};
+
+const imgContainer = document.querySelector('.images');
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    const img = document.createElement('img');
+    img.src = imgPath;
+    img.addEventListener('load', function () {
+      imgContainer.append(img);
+      resolve(img);
+    });
+
+    img.addEventListener('error', function () {
+      reject(new Error('Image not found'));
+    });
+  });
+};
